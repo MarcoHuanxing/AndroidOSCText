@@ -1,0 +1,36 @@
+# --- Node ---
+node_modules/
+npm-debug.log*
+*.log
+
+# --- Local config / secrets ---
+config.json
+config.local.json
+.env
+.env.*
+
+# --- Scratch & build ---
+_scratch/
+dist/
+build/
+out/
+
+# --- Android ---
+*.apk
+*.aab
+*.keystore
+*.jks
+local.properties
+.gradle/
+android-app/build/
+android-app/.idea/
+android-app/captures/
+.cxx/
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini

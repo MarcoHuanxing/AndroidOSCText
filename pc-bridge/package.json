@@ -1,0 +1,17 @@
+{
+  "name": "androidosctext-pc-bridge",
+  "version": "0.1.0",
+  "description": "LAN bridge: Android phone text -> VRChat OSC chatbox",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "bin": { "aost-bridge": "src/index.js" },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test test/"
+  },
+  "engines": { "node": ">=18" },
+  "keywords": ["vrchat", "osc", "chatbox", "lan", "accessibility"],
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidOSCText</string>
+
+    <string name="settings">连接设置</string>
+    <string name="connect">连接</string>
+    <string name="send">发送</string>
+    <string name="typing_indicator">"..." 指示器</string>
+    <string name="sfx_label">提示音</string>
+
+    <string name="hint_host">PC 局域网 IP，例如 192.168.1.10</string>
+    <string name="hint_port">端口（默认 7712）</string>
+    <string name="hint_token">访问令牌</string>
+    <string name="hint_compose">输入要显示在 VRChat Chatbox 上的文字…</string>
+
+    <string name="status_checking">正在检查连接…</string>
+    <string name="status_connected_config">已连接 %1$s:%2$d</string>
+    <string name="status_sending">发送中…</string>
+    <string name="status_sent">已发送</string>
+    <string name="status_failed">连接失败：%1$s</string>
+
+    <string name="counter_zero">0 / 144</string>
+    <string name="counter_format">%1$d / %2$d</string>
+    <string name="counter_lines_format">%1$d / %2$d · %3$d/%4$d 行</string>
+
+    <string name="toast_connected">连接成功</string>
+    <string name="toast_failed">失败：%1$s</string>
+    <string name="toast_typing_on">已显示输入指示器</string>
+</resources>
