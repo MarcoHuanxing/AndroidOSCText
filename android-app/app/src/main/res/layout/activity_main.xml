@@ -91,6 +91,14 @@
             android:textColor="#E6E9EF"
             android:textColorHint="#5A6274" />
 
+        <Button
+            android:id="@+id/discoverButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#2E7D5B"
+            android:text="@string/discover" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             buildClient()
             checkHealth(announce = true)
         }
+        binding.discoverButton.setOnClickListener { runDiscovery() }
         binding.settingsToggle.setOnClickListener {
             val showing = binding.settingsPanel.visibility == View.VISIBLE
             binding.settingsPanel.visibility = if (showing) View.GONE else View.VISIBLE
@@ -139,6 +140,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Broadcast for a bridge on the LAN and fill in the connection fields.
+     * Keeps whatever the user typed if nothing answers.
+     */
+    private fun runDiscovery() {
+        saveSettings()
+        binding.discoverButton.isEnabled = false
+        binding.statusLabel.text = getString(R.string.discovering)
+        binding.statusLabel.setTextColor(0xFF8A93A6.toInt())
+
+        lifecycleScope.launch {
+            val found = try {
+                DiscoveryClient().discover()
+            } catch (e: Exception) {
+                emptyList()
+            }
+
+            binding.discoverButton.isEnabled = true
+
+            if (found.isEmpty()) {
+                binding.statusLabel.text = getString(R.string.discover_none)
+                binding.statusLabel.setTextColor(0xFFF85149.toInt())
+                return@launch
+            }
+
+            val best = found.first()
+            binding.hostField.setText(best.host)
+            binding.portField.setText(best.port.toString())
+            prefs.host = best.host
+            prefs.port = best.port
+            buildClient()
+
+            binding.statusLabel.text = getString(R.string.discover_found, found.size, best.host + ":" + best.port)
+            binding.statusLabel.setTextColor(0xFF3FB950.toInt())
+
+            checkHealth(announce = true)
+        }
+    }
     private fun sendText() {
         val c = client ?: return
         val text = binding.composeBox.text?.toString().orEmpty()

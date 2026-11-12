@@ -65,7 +65,15 @@ VRChat 启动时会自动开启 OSC（UDP 9000）。不需要额外安装任何�
 
 ### 3. 手机端
 
-装 `android-app/build/outputs/apk/debug/app-debug.apk`，打开后填：
+装 `android-app/build/outputs/apk/debug/app-debug.apk`，打开后点右上角齿轮展开连接设置。
+
+**方式一：自动发现（推荐）**
+
+点「自动发现 PC」，App 会广播 UDP 7713 搜同一局域网里的桥接，找到后自动填好 IP 和端口，再补令牌即可。
+
+> IP 经常变（DHCP 重新分配、换 Wi-Fi），自动发现省得每次重填。
+
+**方式二：手动填**
 
 - **PC 局域网 IP**：启动窗口里打印的那个（如 `192.168.1.57`）
 - **端口**：`7712`
@@ -122,6 +130,31 @@ curl -X POST http://192.168.1.57:7712/api/say \
 
 ---
 
+## 自动发现协议
+
+手机不需要手输 IP，靠一个极简的 UDP 广播协议找到 PC：
+
+```
+手机                                     PC 桥接 (UDP 7713)
+ │                                            │
+ ├── { "aost": "AOST-DISCOVER" } ──────────► │
+ │                                            │
+ │ ◄── { "aost": "AOST-DISCOVER",             │
+ │       "port": 7712,                        │
+ │       "name": "AndroidOSCText bridge",     │
+ │       "version": "0.1.0",                  │
+ │       "requiresToken": true } ────────────┤
+```
+
+设计选择：
+
+- **用 UDP 广播而非 mDNS/Bonjour** —— Android 的 `NsdManager` 需要多播锁，各家 ROM 行为不一致；裸 UDP 广播在所有平台都稳定
+- **同时广播 `255.255.255.255` 和各网卡的定向广播地址** —— 不少路由器会过滤全局广播
+- **应答里直接带 HTTP 端口** —— 省掉一次额外的查询往返
+
+安全性：发现阶段不返回令牌。令牌只在之后 HTTP 请求的 `Authorization` 头里出现。
+
+---
 ## OSC 协议细节
 
 按 [VRChat 官方 wiki](https://wiki.vrchat.com/wiki/OSC#Chatbox)：

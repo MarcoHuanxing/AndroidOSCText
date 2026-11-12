@@ -8,6 +8,10 @@
     <string name="typing_indicator">"..." 指示器</string>
     <string name="sfx_label">提示音</string>
 
+    <string name="discover">自动发现 PC</string>
+    <string name="discovering">正在搜索局域网内的 PC…</string>
+    <string name="discover_found">找到 %1$d 个 PC，已填入 %2$s</string>
+    <string name="discover_none">没找到 PC。请确认：电脑上桥接已启动、手机和电脑连同一个 Wi-Fi</string>
     <string name="hint_host">PC 局域网 IP，例如 192.168.1.10</string>
     <string name="hint_port">端口（默认 7712）</string>
     <string name="hint_token">访问令牌</string>
