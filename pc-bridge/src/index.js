@@ -10,8 +10,9 @@ const os = require('os');
 const { loadConfig, lanAddresses, CONFIG_FILE } = require('./config');
 const { Chatbox } = require('./chatbox');
 const { createServer } = require('./server');
+const { createDiscoveryResponder } = require('./discovery');
 
-function banner(cfg, chatbox) {
+function banner(cfg) {
   const addrs = lanAddresses();
   const line = '='.repeat(64);
   console.log(line);
@@ -61,7 +62,16 @@ async function main() {
     server.listen(cfg.httpPort, cfg.httpHost, resolve);
   });
 
-  banner(cfg, chatbox);
+  let discovery = null;
+  if (cfg.enableDiscovery !== false) {
+    try {
+      discovery = createDiscoveryResponder(cfg);
+    } catch (err) {
+      console.warn('[discovery] 启动失败（不影响正常使用）:', err.message);
+    }
+  }
+
+  banner(cfg);
 
   // One-shot CLI mode: "node src/index.js --say hello"
   const sayIdx = process.argv.indexOf('--say');
@@ -75,13 +85,16 @@ async function main() {
       process.exitCode = 1;
     }
     chatbox.close();
+    if (discovery) discovery.close();
     server.close();
     return;
   }
 
   const shutdown = (signal) => {
-    console.log('\n[' + signal + '] 正在关闭...');
+    console.log('');
+    console.log('[' + signal + '] 正在关闭...');
     chatbox.close();
+    if (discovery) discovery.close();
     server.close(() => process.exit(0));
     setTimeout(() => process.exit(0), 2000).unref();
   };

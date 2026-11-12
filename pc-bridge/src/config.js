@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -13,6 +13,8 @@ const DEFAULTS = {
   // --- HTTP server (what the phone talks to) ---
   httpHost: '0.0.0.0',
   httpPort: 7712,
+  // UDP broadcast responder so the phone can auto-discover this PC
+  enableDiscovery: true,
   // Access token required from clients. Auto-generated on first run and
   // persisted; override via config.json or AOST_TOKEN.
   token: '',
