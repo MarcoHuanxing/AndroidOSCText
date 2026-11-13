@@ -1,6 +1,6 @@
 # AndroidOSCText
 
-###SBAI瞎JB推
+#SBAI瞎JB推
 
 **用手机键盘打字，让文字出现在 VRChat 的 Chatbox 上。**
 
