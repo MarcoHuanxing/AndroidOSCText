@@ -27,7 +27,7 @@ UTF-8 字节 + 1 个 NUL 结尾 + 填充到 4 的倍数。
 | `中` | 3 | 4 | 4 |
 | `中文` | 6 | 7 | 8 |
 
-单元测试 `UTF-8 text pads on byte length, not character count` 守着这条。
+所以「4 个中文字」比「4 个 ASCII 字符」占更多字节配额，但按码点算它们都是 4 个字符。
 
 ### 类型标签
 

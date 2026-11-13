@@ -8,7 +8,6 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "node --test test/",
     "build:bundle": "node scripts/bundle.mjs",
     "build:exe": "node scripts/build-exe.mjs"
   },

@@ -9,6 +9,7 @@
 - **单文件 exe 分发** —— 新增 `npm run build:exe`：用 Node.js SEA（`--experimental-sea-config`）生成 blob，再由 `postject` 注入到拷贝出的 `node.exe`，产出仓库根的 `dist/aost-bridge.exe`。实测 88.7 MB（Node 24.19），Node 运行时打在里面，对方不用装 Node
 - **首次运行零配置** —— 双击就在 exe 同目录生成 `config.json`（含随机令牌），终端打印本机名 / OSC 目标 / HTTP 监听 / 局域网地址 / 令牌；换电脑时把 `config.json` 一起拷走即可沿用原令牌
 - **新增 `AOST_CONFIG`** —— 可指定 `config.json` 的路径（放别处或一台机器跑多份配置），与已有的 `AOST_PORT` / `AOST_OSC_HOST` / `AOST_OSC_PORT` / `AOST_TOKEN` 一起构成完整的覆盖手段
+- **移除测试套件与 CI** —— 删掉 `pc-bridge/test/` 与 `.github/`：桥接的测试依赖本机环境（占真实端口、要 VRChat 在跑），换台机器跑出来的是假失败，留着只会制造噪声。README 同时精简为「安装 / 使用 / AI 声明」，架构、发现协议、项目结构移入 `docs/architecture.md`，HTTP 接口移入 `docs/http-api.md`
 - **不把打包和测试搬进 GitHub Actions** —— 桥接的测试依赖本机环境（占真实端口、要 VRChat 在跑），换台机器跑出来的是假失败；exe 也只需在本机 `npm run build:exe` 出一次。`.github/` 已移除
 - **文档** —— 新增 [`docs/packaging.md`](docs/packaging.md)（选型取舍、为什么 89 MB、构建与验证、令牌迁移、防火墙、SmartScreen 与杀软误报、排错）；README「快速开始」新增「方式 A：直接用 exe」，原源码运行方式改为「方式 B」
 
