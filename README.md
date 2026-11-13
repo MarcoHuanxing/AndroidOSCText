@@ -1,5 +1,7 @@
 # AndroidOSCText
 
+###SBAI瞎JB推
+
 **用手机键盘打字，让文字出现在 VRChat 的 Chatbox 上。**
 
 宿舍里不方便说话？不用买麦克风，不用装 SAPI，掏出手机打字就行 —— 文字会实时显示在你头顶的 Chatbox 里，对面的人直接看得到。
