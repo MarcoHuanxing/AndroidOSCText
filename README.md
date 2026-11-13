@@ -16,7 +16,7 @@
 
 **方式 A：直接用 exe —— 推荐，不用装 Node**
 
-把 `dist/aost-bridge.exe` 放到一个**普通目录**里（比如桌面上新建的 `aost` 文件夹；别放 `C:\Program Files` —— 首次运行要在同目录写配置），然后双击。
+下载[服务端](releases/download/main/aost-bridge.exe)放到一个**普通目录**里（比如桌面上新建的 `aost` 文件夹；别放 `C:\Program Files` —— 首次运行要在同目录写配置），然后双击。
 
 - 不需要 Node.js，不需要 `npm install`，不需要管理员权限
 - 首次运行在 exe 同目录生成 `config.json`（含随机令牌）
@@ -45,7 +45,7 @@ npm start
   手机请访问以下任一地址：
     http://192.168.1.57:7712    [以太网]
 
-  访问令牌    : 9d3d034122b5d63e39b99e80d68b93de
+  访问令牌    : <YourToken>
 ================================================================
 ```
 
@@ -57,8 +57,7 @@ VRChat 启动时自动开启 OSC（UDP 9000），不需要装任何东西。
 
 ### 3. 手机端
 
-Package内下载对应.apk安装包即可
-
+下载[客户端](releases/download/main/AOSCT.apk)
 不装 App 也行：手机浏览器打开 `http://<PC 的局域网 IP>:7712`，功能完全一样。
 
 ---
