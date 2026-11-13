@@ -57,7 +57,7 @@ VRChat 启动时自动开启 OSC（UDP 9000），不需要装任何东西。
 
 ### 3. 手机端
 
-装 `android-app/build/outputs/apk/debug/app-debug.apk`（自己构建的方法见 [部署与排错](docs/setup-troubleshooting.md)）。
+Package内下载对应.apk安装包即可
 
 不装 App 也行：手机浏览器打开 `http://<PC 的局域网 IP>:7712`，功能完全一样。
 
@@ -118,10 +118,9 @@ AI 生成的代码可能包含错误。现状如实写：
 
 | 项 | 现状 |
 |---|---|
-| 自动化测试 | **没有**。桥接的测试依赖本机环境（要占真实端口、要 VRChat 在跑），换台机器跑出来的是假失败，所以没有保留测试套件 |
 | 协议依据 | 每个 OSC 地址都对照 [VRChat 官方 wiki](https://wiki.vrchat.com/wiki/OSC#Chatbox) + 本机 OSCQuery 实测，见 [OSC 协议参考](docs/osc-protocol.md) |
 
-也就是说：**它没有经过生产环境验证**，请按「自担风险」使用，重要场合先自己完整跑一遍。
+**没有经过生产环境验证**，请按「自担风险」使用，重要场合先自己完整跑一遍。
 
 ### 如果你要复用
 
