@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -34,7 +34,36 @@ const DEFAULTS = {
   historySize: 200,
 };
 
-const CONFIG_FILE = path.join(__dirname, '..', 'config.json');
+/**
+ * Are we running as a Node SEA single-file executable?
+ *
+ * node:sea exists from Node 21; on plain "node src/index.js" it is present and
+ * isSea() simply returns false, so this never throws in practice.
+ */
+function isSeaMode() {
+  try {
+    const sea = require('node:sea');
+    return typeof sea.isSea === 'function' && sea.isSea() === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Where does config.json live? Resolution order:
+ *   1) AOST_CONFIG environment variable (absolute, or relative to the CWD)
+ *   2) single-file exe (SEA): the directory the .exe sits in, so the exe can be
+ *      dropped anywhere (e.g. a USB stick) and keeps its token beside it
+ *   3) source checkout: pc-bridge/config.json (the historical behaviour)
+ */
+function resolveConfigFile() {
+  const fromEnv = process.env.AOST_CONFIG;
+  if (fromEnv && String(fromEnv).trim()) return path.resolve(String(fromEnv).trim());
+  if (isSeaMode()) return path.join(path.dirname(process.execPath), 'config.json');
+  return path.join(__dirname, '..', 'config.json');
+}
+
+const CONFIG_FILE = resolveConfigFile();
 
 /** Enumerate non-loopback IPv4 addresses so the phone can find us. */
 function lanAddresses() {
@@ -90,4 +119,4 @@ function loadConfig(overrides = {}) {
   return cfg;
 }
 
-module.exports = { loadConfig, lanAddresses, randomToken, DEFAULTS, CONFIG_FILE };
+module.exports = { loadConfig, lanAddresses, randomToken, DEFAULTS, CONFIG_FILE, isSeaMode, resolveConfigFile };

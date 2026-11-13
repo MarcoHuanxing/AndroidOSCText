@@ -36,7 +36,20 @@ HTTP 这一层还带来几个实际好处：
 
 ## 快速开始
 
-### 1. PC 端（需要 Node.js ≥ 18）
+### 1. PC 端
+
+两种方式二选一，跑起来之后第 2、3 步完全一样。
+
+**方式 A：直接用 exe（推荐，不用装 Node）**
+
+把 `dist/aost-bridge.exe` 放到一个**普通目录**里（比如桌面上新建的 `aost` 文件夹；别放 `C:\Program Files` —— 首次运行要在同目录写配置），然后双击。
+
+- 不用装 Node.js，不用 `npm install`，不用管理员权限
+- 首次运行会在 exe 同目录生成 `config.json`（含随机令牌）
+- 代价：文件约 **89 MB**，因为 Node 运行时被打包在里面
+- 怎么构建、换电脑时令牌怎么带走、SmartScreen 怎么过，都写在 [docs/packaging.md](docs/packaging.md)
+
+**方式 B：从源码运行（需要 Node.js ≥ 18）**
 
 ```bash
 cd pc-bridge
@@ -49,8 +62,11 @@ npm start
 ================================================================
   AndroidOSCText  ·  手机 -> VRChat Chatbox 桥接
 ================================================================
+  版本        : 0.2.0
+  运行方式    : 单文件 exe（免安装 Node）
   OSC 目标    : 127.0.0.1:9000  (VRChat)
   HTTP 监听   : 0.0.0.0:7712
+  配置文件    : D:\aost\config.json
 
   手机请访问以下任一地址：
     http://192.168.1.57:7712    [以太网]
@@ -99,7 +115,9 @@ AndroidOSCText/
 │   │   ├── webui.js            浏览器兜底界面
 │   │   ├── config.js           配置加载 / 局域网 IP 枚举 / 令牌生成
 │   │   └── index.js            入口
-│   └── test/                   单元测试 + E2E 测试
+│   ├── scripts/                打包脚本：bundle.mjs / build-exe.mjs
+│   └── test/                   单元测试 + E2E 测试（本机跑，不进 CI）
+├── dist/                       打包产物 aost-bridge.exe（gitignore，不入库）
 ├── android-app/                Android 客户端（Kotlin）
 │   └── app/src/main/java/com/aost/bridge/
 │       ├── BridgeClient.kt     HTTP 客户端
@@ -144,7 +162,7 @@ curl -X POST http://192.168.1.57:7712/api/say \
  │ ◄── { "aost": "AOST-DISCOVER",             │
  │       "port": 7712,                        │
  │       "name": "AndroidOSCText bridge",     │
- │       "version": "0.1.0",                  │
+ │       "version": "0.2.0",                  │
  │       "requiresToken": true } ────────────┤
 ```
 
@@ -180,6 +198,8 @@ node test/e2e.js      # 14 项 HTTP 端到端测试（需先 npm start）
 
 E2E 覆盖：健康检查、局域网地址、令牌缺失/错误拒绝、UTF-8 原样保留、144 字符截断、9 行限制、空文本拒绝、typing、历史记录、404。
 
+> 这些测试只在本机跑：它们依赖真实环境（要占 7712/7713 端口，E2E 还得先 `npm start`）。换到 CI 的机器上是另一套环境，跑出来的多半是假失败，所以没有放进 CI。
+
 ---
 
 ## 限制与已知问题
@@ -202,7 +222,7 @@ AI 参与的部分：
 - Android 客户端全部源码（Kotlin Activity、HTTP 客户端、布局与资源）
 - 单元测试、端到端测试用例
 - 本 README 与 `docs/` 下的全部文档
-- GitHub Actions 工作流
+- 打包脚本（`pc-bridge/scripts/`）
 
 ### 人工把关的部分
 
@@ -221,7 +241,7 @@ AI 生成的代码可能包含错误。本项目做了以下保障：
 | 单元测试 | 17 个，覆盖 OSC 字节布局、UTF-8 对齐、emoji 截断边界 |
 | 端到端测试 | 14 项，真实 HTTP 打到你本机的桥接服务 |
 | 协议依据 | 每个 OSC 地址都对照 VRChat 官方 wiki + OSCQuery 实测 |
-| CI | GitHub Actions 在 Node 18/20/22 上跑测试 |
+| CI | 无。测试依赖本机环境（占真实端口、要 VRChat 在跑），换台机器跑的是假失败，所以只在本机跑 |
 
 但这**不等于**经过生产环境验证。请按「自担风险」使用，重要场景先自己测一遍。
 

@@ -14,6 +14,8 @@ _scratch/
 dist/
 build/
 out/
+# pc-bridge/scripts/bundle.mjs 的中间产物（dot 目录，通用 build/ 规则抓不到）
+.build/
 
 # --- Android ---
 *.apk

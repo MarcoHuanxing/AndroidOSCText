@@ -7,10 +7,31 @@
  */
 
 const os = require('os');
-const { loadConfig, lanAddresses, CONFIG_FILE } = require('./config');
+const { loadConfig, lanAddresses, CONFIG_FILE, isSeaMode } = require('./config');
 const { Chatbox } = require('./chatbox');
 const { createServer } = require('./server');
 const { createDiscoveryResponder } = require('./discovery');
+const { version: VERSION } = require('../package.json');
+
+const WINDOW_TITLE = 'AndroidOSCText 桥接 · Chatbox Bridge';
+
+const USAGE = [
+  'AndroidOSCText PC 桥接 v' + VERSION,
+  '',
+  '用法:',
+  '  aost-bridge                 启动桥接（HTTP 0.0.0.0:7712 → OSC 127.0.0.1:9000）',
+  '  aost-bridge --version       打印版本号后退出',
+  '  aost-bridge --help          打印这份帮助后退出',
+  '  aost-bridge --say <文本>    前台发送一条消息后退出（自检 / 脚本用）',
+  '',
+  '配置文件查找顺序:',
+  '  1) 环境变量 AOST_CONFIG 指定的路径',
+  '  2) 单文件 exe 运行时: exe 同目录下的 config.json',
+  '  3) 源码运行 (node src/index.js) 时: pc-bridge/config.json',
+  '首次运行会自动生成访问令牌并写回 config.json。',
+  '',
+  '环境变量: AOST_CONFIG / AOST_PORT / AOST_OSC_HOST / AOST_OSC_PORT / AOST_TOKEN',
+].join('\n');
 
 function banner(cfg) {
   const addrs = lanAddresses();
@@ -18,6 +39,8 @@ function banner(cfg) {
   console.log(line);
   console.log('  AndroidOSCText  ·  手机 -> VRChat Chatbox 桥接');
   console.log(line);
+  console.log('  版本        : ' + VERSION);
+  console.log('  运行方式    : ' + (isSeaMode() ? '单文件 exe（免安装 Node）' : '源码 (node src/index.js)'));
   console.log('  本机名      : ' + os.hostname());
   console.log('  OSC 目标    : ' + cfg.oscHost + ':' + cfg.oscPort + '  (VRChat)');
   console.log('  HTTP 监听   : ' + cfg.httpHost + ':' + cfg.httpPort);
@@ -102,11 +125,30 @@ async function main() {
   process.on('SIGTERM', () => shutdown('SIGTERM'));
 }
 
-if (require.main === module) {
-  main().catch((err) => {
-    console.error('[fatal]', err.message);
-    process.exit(1);
-  });
+/** Split argv into flags and payload, tolerating the SEA shape
+ *  (argv = [exePath, exePath, ...userArgs]) and plain node (argv[1] = script). */
+function userArgs(argv = process.argv) {
+  return argv.slice(2);
 }
 
-module.exports = { main };
+if (require.main === module) {
+  const args = userArgs();
+  if (args.includes('--version') || args.includes('-v')) {
+    // No process.exit(): let stdout drain so piping into a file never truncates.
+    console.log(VERSION);
+  } else if (args.includes('--help') || args.includes('-h')) {
+    console.log(USAGE);
+  } else {
+    try {
+      process.title = WINDOW_TITLE;
+    } catch {
+      // Some hosts refuse title changes; purely cosmetic.
+    }
+    main().catch((err) => {
+      console.error('[fatal]', err.message);
+      process.exit(1);
+    });
+  }
+}
+
+module.exports = { main, VERSION, USAGE };
